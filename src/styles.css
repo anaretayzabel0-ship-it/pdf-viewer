@@ -1,0 +1,436 @@
+:root {
+  --accent: #3d6d95;
+  --ink: #1c2530;
+  --muted: #7b8794;
+  --border: #d8dee5;
+  --card-bg: #ffffff;
+  --backdrop: rgba(10, 12, 16, 0.5);
+  --nav-height: 64px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink);
+  background: #eef1f4;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: var(--muted);
+  font-size: 15px;
+  padding: 24px;
+  text-align: center;
+}
+
+.app-shell {
+  position: relative;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---------- PDF stage ---------- */
+
+.pdf-stage {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+  background: #3a3f47;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pdf-page-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.pdf-canvas {
+  display: block;
+}
+
+.pdf-error {
+  padding: 24px;
+  color: #fff;
+  text-align: center;
+}
+
+/* Fixed-centered overlay for the focused lot's controls — see PdfStage.jsx
+   for why this is decoupled from scroll-space coordinates. */
+.focused-lot-overlay-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.focused-lot-overlay {
+  position: relative;
+  pointer-events: none;
+}
+
+.focused-lot-card-chrome {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px;
+  pointer-events: none;
+}
+
+.lot-label {
+  pointer-events: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.star-toggle {
+  pointer-events: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.star-toggle.is-starred {
+  border-color: var(--accent);
+}
+
+.lot-chevron {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.lot-chevron:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.lot-chevron--prev {
+  left: -52px;
+}
+
+.lot-chevron--next {
+  right: -52px;
+}
+
+/* ---------- Bottom nav ---------- */
+
+.bottom-nav {
+  display: flex;
+  height: var(--nav-height);
+  background: var(--card-bg);
+  border-top: 1px solid var(--border);
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+  gap: 4px;
+}
+
+.nav-button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: var(--ink);
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.nav-button.is-active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.nav-icon {
+  display: flex;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* ---------- Modals (shared) ---------- */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--backdrop);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 50;
+}
+
+@media (min-width: 640px) {
+  .modal-backdrop {
+    align-items: center;
+  }
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 0 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .modal-card {
+    border-radius: 16px;
+    margin-bottom: 40px;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.empty-state {
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.primary-button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- Watchlist modal ---------- */
+
+.watchlist-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.watchlist-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.watchlist-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.watchlist-row:last-child {
+  border-bottom: none;
+}
+
+.watchlist-row-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 12px 4px;
+  font-size: 15px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ---------- Jump spinner modal ---------- */
+
+.spinner-window {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.spinner-highlight {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  pointer-events: none;
+}
+
+.spinner-list {
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.spinner-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.spinner-item.is-centered {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ---------- More carousel modal ---------- */
+
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 44px;
+}
+
+.carousel-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f1f3f5;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.carousel-placeholder img,
+.carousel-placeholder video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-empty {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 16px;
+  text-align: center;
+}
+
+.carousel-chevron {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.carousel-chevron:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.carousel-chevron--prev {
+  left: 0;
+}
+
+.carousel-chevron--next {
+  right: 0;
+}
+
+.carousel-counter {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
